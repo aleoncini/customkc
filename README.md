@@ -27,7 +27,7 @@ In the pod now we deploy also the PGADMIN tool, a web interface to administer po
 
     > podman run -d --rm --name pgadmin --pod postgres -e 'PGADMIN_DEFAULT_EMAIL=admin@redhat.com' -e 'PGADMIN_DEFAULT_PASSWORD=password' docker.io/dpage/pgadmin4
 
-This tool will be useful for the next quick steps we need to execute before launching the keycloak server. Open a browser and connect to http://localhost:4080 (or any other port you have specified in the previous comand *podman pod create ...*). Insert the email and password when launched the pgadmin container and access the web console.
+This tool will be useful for the next quick steps we need to execute before launching the keycloak server. Open a browser and connect to http://localhost:4080 (or any other port you have specified in the previous comand *podman pod create ...*). Insert the email and password specified when launched the pgadmin container and access the web console.
 
 Using the console you just need to create a server and into the server to create a database (name the database **keycloak**).
 
@@ -45,4 +45,4 @@ Finally we can run the customi keycloak image:
 
     > podman run -d --rm --name keycloak -p 8443:8443 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --db-url=jdbc:postgresql://<your-workstation-hostname>:5432/keycloak --db-username=admin --db-password=password --hostname=<your-workstation-hostname>:8443
 
-access the console and start to protect applications!
+access the console with **https://<your-workstation-hostname>:8443** and start to protect applications!
