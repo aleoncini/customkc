@@ -18,13 +18,31 @@ Let's start creating the pod:
 
 now we can run the postgresql container (version 13 for this example):
 
-    > podman run -d --rm --name db --pod=postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -v ~/worklab/projects/volumes/pgsql_13/data:/var/lib/postgresql/data --privileged docker.io/library/postgres:13
+    > podman run -d --rm --name db --pod postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -v ~/worklab/projects/volumes/pgsql_13/data:/var/lib/postgresql/data --privileged docker.io/library/postgres:13
 
 in the previous command note that '--privileged' parameter is used to avoid issues of privileges when running in rootless mode.
+The -v parameter is used give persistency to the pod through restarts.
+
+In the pod now we deploy also the PGADMIN tool, a web interface to administer postgresql databases:
+
+    > podman run -d --rm --name pgadmin --pod postgres -e 'PGADMIN_DEFAULT_EMAIL=admin@redhat.com' -e 'PGADMIN_DEFAULT_PASSWORD=password' docker.io/dpage/pgadmin4
+
+This tool will be useful for the next quick steps we need to execute before launching the keycloak server. Open a browser and connect to http://localhost:4080 (or any other port you have specified in the previous comand *podman pod create ...*). Insert the email and password when launched the pgadmin container and access the web console.
+
+Using the console you just need to create a server and into the server to create a database (name the database **keycloak**).
+
+Done! The database is now ready to be used as the external configuration repository for Keycloak server.
 
 ## Build and Run the custom keycloak image
 
-podman build -t custom-keycloak .
+access the docker directory and execute the build with the command 
 
-podman run --rm --name keycloak -p 8443:8443 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password kc start --db-url=jdbc:postgresql://ersamurai:5432/keycloak --db-username=admin --db-password=password --hostname=ersamurai:8443
+    > podman build -t custom-keycloak .
 
+looking at the *Dockerfile* used in this example I just want to address a couple of points: we are using the multi stage build (very useful to be sure that the build will be indipendent from the environment) and at line 13 we execute the final setup/conf/custumization, remember that this phase could be performed also at deploy time but of course the deploy will be slower.
+
+Finally we can run the customi keycloak image:
+
+    > podman run -d --rm --name keycloak -p 8443:8443 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --db-url=jdbc:postgresql://<your-workstation-hostname>:5432/keycloak --db-username=admin --db-password=password --hostname=<your-workstation-hostname>:8443
+
+access the console and start to protect applications!
