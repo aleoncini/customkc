@@ -45,4 +45,4 @@ Finally we can run the customi keycloak image:
 
     > podman run -d --rm --name keycloak -p 8443:8443 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --db-url=jdbc:postgresql://<your-workstation-hostname>:5432/keycloak --db-username=admin --db-password=password --hostname=<your-workstation-hostname>:8443
 
-access the console with **https://<your-workstation-hostname>:8443** and start to protect applications!
+access the console with **https://yourhost:8443** and start to protect applications!
