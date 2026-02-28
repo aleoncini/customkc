@@ -33,7 +33,7 @@ This tool will be useful for the next quick steps we need to execute before laun
 
 Using the console create a server: click on "Add New Server", give a name to the server and set the hostname as localhost in the connection TAB.
 
-Now, in the tree on the left side, click on the newly created server and in the component named Databases right-click the "create->databse" command. Name the database **keycloak**
+Now, in the tree on the left side, click on the newly created server and in the component named Databases right-click the "create->database" command. Name the database **keycloak**
 
 Done! The database is now ready to be used as the external configuration repository for Keycloak server.
 
@@ -43,10 +43,14 @@ access the docker directory and execute the build with the command
 
     > podman build -t custom-keycloak .
 
-looking at the *Dockerfile* used in this example I just want to address a couple of points: we are using the multi stage build (very useful to be sure that the build will be indipendent from the environment) and at line 13 we execute the final setup/conf/custumization, remember that this phase could be performed also at deploy time but of course the deploy will be slower.
+looking at the *Dockerfile* used in this example I just want to address a couple of points: we are using the multi stage build (very useful to be sure that the build will be indipendent from the environment) and at line 13 we execute the final setup/conf/customization, remember that this phase could be performed also at deploy time but of course the deploy will be slower.
 
-Finally we can run the customi keycloak image:
+In our example we build an image of keycloak adding specific information to connect to an external database (postgresql) and we add certificates in order to properly enable keycloak https listener. NOTE: Certificate here are self signed and not correct for a production environment, do not use this method in a production environment.
 
-    > podman run -d --rm --name keycloak -p 8443:8443 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --db-url=jdbc:postgresql://<your-workstation-hostname>:5432/keycloak --db-username=admin --db-password=password --hostname=<your-workstation-hostname>:8443
+As a final customization step we add a custom authenticator...
+
+Finally we can run the custom keycloak image:
+
+    > podman run -d --rm --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --hostname=https://localhost:8443
 
 access the console with **https://yourhost:8443** and start to protect applications!
