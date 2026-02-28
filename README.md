@@ -2,7 +2,7 @@
 
 a customized keycloak container image
 
-This project is an exmple of how to create a customized (i.e. an image with an embedded setup to access a production DB or with a company brand theme or with specific SPI providers) image of Kycloak.
+This project is an exmple of how to create a customized (i.e. an image with an embedded setup to access a production DB or with a company brand theme or with specific SPI providers) image of Keycloak.
 
 In this example the external DB is a PostgresQL instance.
 
@@ -21,7 +21,7 @@ now we can run the postgresql container (version 13 for this example):
     > podman run -d --rm --name db --pod postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -v ~/worklab/projects/volumes/pgsql_13/data:/var/lib/postgresql/data --privileged docker.io/library/postgres:13
 
 in the previous command note that '--privileged' parameter is used to avoid issues of privileges when running in rootless mode.
-The -v parameter is used give persistency to the pod through restarts.
+The -v parameter is used to give persistency to the pod through restarts.
 
 In the pod now we deploy also the PGADMIN tool, a web interface to administer postgresql databases:
 
