@@ -62,3 +62,9 @@ podman run -d --rm --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PAS
 ```
 
 access the console with **https://yourhost:8443** and start to protect applications!
+
+## additional modules
+
+There are other additional modules that you can try and test
+
+    - ***CV-ISSUER*** This module add the OID4VCI feature to the keycloak instance and can be used to have an implementation of the EUDI Wallet VC Issuer
