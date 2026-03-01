@@ -67,4 +67,4 @@ access the console with **https://yourhost:8443** and start to protect applicati
 
 There are other additional modules that you can try and test
 
-    - ***CV-ISSUER*** This module add the OID4VCI feature to the keycloak instance and can be used to have an implementation of the EUDI Wallet VC Issuer
+- ***CV-ISSUER*** This module add the OID4VCI feature to the keycloak instance and can be used to have an implementation of the EUDI Wallet VC Issuer
