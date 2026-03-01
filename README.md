@@ -1,6 +1,6 @@
-# customkc
+# Custom Keycloak
 
-a customized keycloak container image running into a pod
+***a customized keycloak container image running into a pod***
 
 This project is an example of how to create a customized (i.e. an image with an embedded setup to access a production DB or with a company brand theme or with specific SPI providers) image of Keycloak.
 
@@ -58,7 +58,7 @@ In our example we build an image of keycloak adding specific information to conn
 Finally we can run the custom keycloak image:
 
 ```bash
-podman run -d --rm --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --hostname=https://localhost:8443
+podman run -d --rm --name keycloak --pod customkc -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --hostname=https://localhost:8443
 ```
 
 access the console with **https://yourhost:8443** and start to protect applications!
