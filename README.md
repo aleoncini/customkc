@@ -27,7 +27,9 @@ The -v parameter is used to give persistency to the pod through restarts.
 
 In the pod now we deploy also the PGADMIN tool, a web interface to administer postgresql databases:
 
-    > podman run -d --rm --name pgadmin --pod customkc -e 'PGADMIN_DEFAULT_EMAIL=admin@redhat.com' -e 'PGADMIN_DEFAULT_PASSWORD=password' docker.io/dpage/pgadmin4:latest
+```bash
+podman run -d --rm --name pgadmin --pod customkc -e 'PGADMIN_DEFAULT_EMAIL=admin@redhat.com' -e 'PGADMIN_DEFAULT_PASSWORD=password' docker.io/dpage/pgadmin4:latest
+```
 
 This tool will be useful for the next quick steps we need to execute before launching the keycloak server. Open a browser and connect to http://localhost:4080 (or any other port you have specified in the previous comand *podman pod create ...*). Insert the email and password specified when launched the pgadmin container and access the web console.
 
@@ -51,6 +53,6 @@ As a final customization step we add a custom authenticator...
 
 Finally we can run the custom keycloak image:
 
-    > podman run -d --rm --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --hostname=https://localhost:8443
+    > podman run -d --rm --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --hostname=https://localhost:8443 --features=oid4vc-vci
 
 access the console with **https://yourhost:8443** and start to protect applications!
