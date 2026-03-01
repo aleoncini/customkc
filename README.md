@@ -2,9 +2,9 @@
 
 a customized keycloak container image running into a pod
 
-This project is an exmple of how to create a customized (i.e. an image with an embedded setup to access a production DB or with a company brand theme or with specific SPI providers) image of Keycloak.
+This project is an example of how to create a customized (i.e. an image with an embedded setup to access a production DB or with a company brand theme or with specific SPI providers) image of Keycloak.
 
-In this example we will configure a persistent external DB (PostgresQL) and a custom authentication provider.
+In this example we will configure a persistent external DB (PostgresQL) and will add SSL certificates.
 
 The example suppose you are using podman to manage the required containers and pods, in case you are using docker commands should be the same, in case you want to deploy on kubernetes or OpenShift some additional work is required but the base concepts of creating a custom image will remain the same.
 
