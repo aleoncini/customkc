@@ -14,13 +14,17 @@ In this example we are going to use a pod with containers for Keycloak, DB (Post
 
 Let's start creating the pod:
 
-    > podman pod create --name customkc -p 4080:80 -p 8443:8443
+```bash
+podman pod create --name customkc -p 4080:80 -p 8443:8443
+```
 
-The ports that will expose refer to: 4048 => PGAdmin, 8443 => keycloak server.
+The ports that will expose refer to: 4080 => PGAdmin, 8443 => keycloak server. Note that we don't need to export the DB port because it will accessed only internally in the pod and in case of administration we will use PGAdmin through the 4080 http port.
 
-now let's execute the postgresql container (using the latest version that when writing this example is version 18). To make the DB persistent we need to assign a persistent volume to the container.
+Now let's execute the postgresql container (using the latest version that when writing this example is version 18). To make the DB persistent we need to assign a persistent volume to the container.
 
-    > podman run -d --rm --name db --pod customkc -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -v <your_local_directory>:/var/lib/postgresql/data --privileged docker.io/library/postgres:latest
+```bash
+podman run -d --rm --name db --pod customkc -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -v /your/local/directory:/var/lib/postgresql/data --privileged docker.io/library/postgres:latest
+```
 
 in the previous command note that '--privileged' parameter is used to avoid issues of privileges when running in rootless mode.
 The -v parameter is used to give persistency to the pod through restarts.
@@ -41,18 +45,20 @@ Done! The database is now ready to be used as the external configuration reposit
 
 ## Build and Run the custom keycloak image
 
-access the docker directory and execute the build with the command 
+access the keycloak/docker directory and execute the build with the command. This will build an image of keycloak with certificates for https trafic and a preconfigured external DB (the one we have started in the previous tasks).
 
-    > podman build -t custom-keycloak .
+```bash
+podman build -t custom-keycloak .
+```
 
 looking at the *Dockerfile* used in this example I just want to address a couple of points: we are using the multi stage build (very useful to be sure that the build will be indipendent from the environment) and at line 13 we execute the final setup/conf/customization, remember that this phase could be performed also at deploy time but of course the deploy will be slower.
 
 In our example we build an image of keycloak adding specific information to connect to an external database (postgresql) and we add certificates in order to properly enable keycloak https listener. NOTE: Certificate here are self signed and not correct for a production environment, do not use this method in a production environment.
 
-As a final customization step we add a custom authenticator...
-
 Finally we can run the custom keycloak image:
 
-    > podman run -d --rm --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --hostname=https://localhost:8443 --features=oid4vc-vci
+```bash
+podman run -d --rm --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=password custom-keycloak start --hostname=https://localhost:8443
+```
 
 access the console with **https://yourhost:8443** and start to protect applications!
